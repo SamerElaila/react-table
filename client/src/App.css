@@ -1,0 +1,35 @@
+/* .bold {
+  font-weight: bold;
+}
+
+.light-gray {
+  background-color: #d3d3d3;
+}
+
+.dark-gray { 
+  background-color: #a9a9a9;
+} */
+
+* {
+  font-size: 12px;
+}
+
+.Bold {
+  font-weight: bold;
+}
+
+.Green {
+  color: green;
+}
+
+.Red {
+  color: red;
+}
+
+.Grey {
+  background-color: lightgrey;
+}
+
+.DGrey {
+  background-color: grey;
+}
