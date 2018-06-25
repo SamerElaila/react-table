@@ -8,7 +8,7 @@ import generateTableColumns from '../../utils/generateTableColumns';
 class Table extends Component {
     state = {
         data: [],
-        columns: []
+        columns: ['Symbol', 'Trend', 'Current', 'fresh', 'Chg', 'Crowd', 'BetaAlpha']
     }
 
     updateDimensions = () => {
@@ -30,8 +30,8 @@ class Table extends Component {
     componentDidMount() {
         window.addEventListener('resize', this.updateDimensions);
 
-        axios.get('/api/data').then(response => {
-            this.setState({data: response.data.rows, columns: response.data.columns});
+        axios.get('http://sherwin.retailscience.ca:5000/').then(response => {
+            this.setState({data: response.data.recordset});
         }).catch(err => {
             console.log(err);
         });
@@ -43,11 +43,14 @@ class Table extends Component {
 
     render(){
         const { data, columns, width } = this.state;
+
         return (
             <ReactTable
                 data={data}
                 columns={generateTableColumns(columns, width)}
                 getTrProps={this.changeRowStyle}
+                showPagination={false}
+                pageSize={data.length}
             />
         )        
     }
