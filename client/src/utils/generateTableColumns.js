@@ -8,7 +8,7 @@ const mapFun = col => ({
 
 export default (columns, width) =>{
     if(width <= 800) {
-     return ['Symbol', 'Trend', 'Current', 'fresh'].map(mapFun)
+     return ['Symbol', 'Pattern', 'Current', 'WaveLength'].map(mapFun)
     }
     return columns.map(mapFun);
 } 
