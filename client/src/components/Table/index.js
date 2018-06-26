@@ -1,59 +1,82 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import ReactTable from 'react-table'
-import 'react-table/react-table.css'
+import ReactTable from 'react-table';
+import 'react-table/react-table.css';
 
 import generateTableColumns from '../../utils/generateTableColumns';
+import generateClasses from '../../utils/generateClasses';
 
 class Table extends Component {
-    state = {
-        data: [],
-        columns: ['Symbol', 'Trend', 'Current', 'fresh', 'Chg', 'Crowd', 'BetaAlpha']
+  state = {
+    data: [],
+    columns: [
+      'Symbol',
+      'Pattern',
+      'Current',
+      'WaveLength',
+      'Chg',
+      'Crowd',
+      'BetaAlpha'
+    ]
+  };
+
+  updateDimensions = () => {
+    this.setState({ width: window.innerWidth });
+  };
+
+  changeCellStyle = (state, rowInfo, column, instance) => {
+    return {
+      className: generateClasses(rowInfo, column)
+    };
+  };
+
+  changeRowStyle = (_, rowInfo = { original: {} }) => {
+    const res = {};
+    try {
+      const {
+        original: { Bold: bold, Background: background }
+      } = rowInfo;
+      res.style = {
+        fontWeight: bold ? 'bold' : 'normal',
+        backgroundColor: `rgba(0, 0, 0, ${background / 255})`
+      };
+    } catch (e) {
+      console.log(e);
     }
+    return res;
+  };
 
-    updateDimensions = () => {
-        this.setState({ width: window.innerWidth });
-    }
+  componentDidMount() {
+    window.addEventListener('resize', this.updateDimensions);
 
-    changeRowStyle = (_, rowInfo = {original: {}}) => {
-        const res = {};
-        try {
-            const { original: { Bold: bold, Color: color, Background: background } } = rowInfo;
-            res.className = `${bold || ''} ${color || ''} ${background || ''}`;
-        }catch(e){
-            console.log(e);
-        }
-        return res;
-    }
+    axios
+      .get('/api/get-data')
+      .then(response => {
+        this.setState({ data: response.data.recordset });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateDimensions);
+  }
 
-    componentDidMount() {
-        window.addEventListener('resize', this.updateDimensions);
+  render() {
+    const { data, columns, width } = this.state;
 
-        axios.get('http://sherwin.retailscience.ca:5000/').then(response => {
-            this.setState({data: response.data.recordset});
-        }).catch(err => {
-            console.log(err);
-        });
-    }
-
-    componentWillUnmount(){
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    render(){
-        const { data, columns, width } = this.state;
-
-        return (
-            <ReactTable
-                data={data}
-                columns={generateTableColumns(columns, width)}
-                getTrProps={this.changeRowStyle}
-                showPagination={false}
-                pageSize={data.length}
-            />
-        )        
-    }
+    return (
+      <ReactTable
+        data={data}
+        columns={generateTableColumns(columns, width)}
+        getTrProps={this.changeRowStyle}
+        getTdProps={this.changeCellStyle}
+        showPagination={false}
+        pageSize={data.length}
+      />
+    );
+  }
 }
 
 export default Table;

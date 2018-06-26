@@ -1,28 +1,20 @@
-require('env2')('config.env');
 const express = require('express');
+const request = require('request');
 const app = express();
 
-const data = require('./crypto.json');
-
-
-// const dbConnection = require('./database');
-
-// app.get('/', async (req, res) => {
-//     try {
-//       const pool = await dbConnection
-//       const result = await pool.request()
-//           .execute('getAll');
-  
-//       res.json(result.recordset)
-//     } catch (err) {
-//       res.status(500).json({msg: err.message})
-//     }
-//   })
-
-app.get('/api/data', (req,res) => {
-  res.json({rows: data.recordset, columns: Object.keys(data.recordset[0])});
+app.get('/api/get-data', (req, res) => {
+  request('http://sherwin.retailscience.ca:5000/', (err, response, body) => {
+    try {
+      res.json({
+        recordset: JSON.parse(body).recordset
+      });
+    } catch (e) {
+      console.error(e);
+      res.status(409).json({ msg: 'Cannot get data' });
+    }
+  });
 });
 
 app.listen(4001, () => {
-    console.log("server is started at port 4001");
+  console.log('server is started at port 4001');
 });
