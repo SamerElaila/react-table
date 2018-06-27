@@ -1,6 +1,9 @@
 const express = require('express');
+const path = require('path');
 const request = require('request');
 const app = express();
+
+app.use('/', express.static(path.join('app')))
 
 app.get('/api/get-data', (req, res) => {
   request('http://sherwin.retailscience.ca:5000/', (err, response, body) => {
