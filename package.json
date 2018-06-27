@@ -11,7 +11,8 @@
     "client:init": "cd client && npm i",
     "server:init": "cd server && npm i",
     "init": "npm run client:init && npm run server:init",
-    "build": "build the client and copy it to the server directory"
+    "client:build": "cd client && npm run build && xcopy \"build\" \"..\\server\\app\" /E",
+    "build": "npm run build && xcopy \"client\\build\" \"server\\app\" /E"
   },
   "repository": {
     "type": "git",
