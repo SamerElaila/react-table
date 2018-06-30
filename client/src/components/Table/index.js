@@ -67,14 +67,16 @@ class Table extends Component {
     const { data, columns, width } = this.state;
 
     return (
-      <ReactTable
-        data={data}
-        columns={generateTableColumns(columns, width)}
-        getTrProps={this.changeRowStyle}
-        getTdProps={this.changeCellStyle}
-        showPagination={false}
-        pageSize={data.length}
-      />
+      <section className="container">
+        <ReactTable
+          data={data}
+          columns={generateTableColumns(columns, width)}
+          getTrProps={this.changeRowStyle}
+          getTdProps={this.changeCellStyle}
+          showPagination={false}
+          pageSize={data.length}
+        />
+      </section>
     );
   }
 }

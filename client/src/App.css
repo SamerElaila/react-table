@@ -25,3 +25,14 @@
 .row-cell {
   text-align: center;
 }
+
+.container {
+  width: 90%;
+  margin: auto;
+}
+
+@media (max-width: 800px) {
+  .container {
+    width: 100%;
+  }
+}
