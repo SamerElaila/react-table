@@ -2,6 +2,16 @@
   font-size: 12px;
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
+.ReactTable {
+  width: 100% !important;
+  overflow: scroll;
+  padding-right: 0px;
+}
+
 .Bold {
   font-weight: bold;
 }
@@ -24,4 +34,16 @@
 
 .row-cell {
   text-align: center;
+}
+
+@media (max-width: 800px) {
+  .fixed {
+    position: absolute !important;
+    background-color: #fff;
+    z-index: 10;
+  }
+
+  .pattern {
+    margin-left: 100px;
+  }
 }
