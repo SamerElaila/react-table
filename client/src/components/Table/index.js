@@ -5,10 +5,12 @@ import 'react-table/react-table.css';
 
 import generateTableColumns from '../../utils/generateTableColumns';
 import generateClasses from '../../utils/generateClasses';
+import generateHeaderClasses from '../../utils/generateHeaderClasses';
 
 class Table extends Component {
   state = {
     data: [],
+    width: window.innerWidth,
     columns: [
       'Symbol',
       'Pattern',
@@ -30,6 +32,10 @@ class Table extends Component {
     };
   };
 
+  changeHeaderStyle = (state, rowInfo, column, instance) => ({
+    className: generateHeaderClasses(column)
+  });
+
   changeRowStyle = (_, rowInfo = { original: {} }) => {
     const res = {};
     try {
@@ -37,7 +43,7 @@ class Table extends Component {
         original: { Bold: bold, Background: background }
       } = rowInfo;
       res.style = {
-        fontWeight: bold ? 'bold' : 'normal',
+        fontWeight: bold || 'normal',
         backgroundColor: `rgba(0, 0, 0, ${background / 255})`
       };
     } catch (e) {
@@ -65,13 +71,22 @@ class Table extends Component {
 
   render() {
     const { data, columns, width } = this.state;
+    const generatedColumns = generateTableColumns(columns, width);
+
+    const style = {
+      width: `${generatedColumns.length * 100}px`,
+      margin: 'auto',
+      maxWidth: `${generatedColumns.length * 100}px`
+    };
 
     return (
       <ReactTable
+        style={style}
         data={data}
-        columns={generateTableColumns(columns, width)}
+        columns={generatedColumns}
         getTrProps={this.changeRowStyle}
         getTdProps={this.changeCellStyle}
+        getTheadThProps={this.changeHeaderStyle}
         showPagination={false}
         pageSize={data.length}
       />
