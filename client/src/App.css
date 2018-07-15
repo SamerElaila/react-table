@@ -36,6 +36,13 @@
   text-align: center;
 }
 
+.timer {
+  width: 85%;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+}
+
 @media (max-width: 800px) {
   .fixed {
     position: absolute !important;
