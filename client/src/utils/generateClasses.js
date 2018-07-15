@@ -1,4 +1,4 @@
-export default (row, column) => {
+export default (row = { original: {} }, column) => {
   let classes = 'row-cell ';
   switch (column.Header) {
     case 'Symbol':

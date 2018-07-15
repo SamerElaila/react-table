@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
 import generateTableColumns from '../../utils/generateTableColumns';
 import generateClasses from '../../utils/generateClasses';
 import generateHeaderClasses from '../../utils/generateHeaderClasses';
+import concatData from '../../utils/concatData';
 
 class Table extends Component {
   state = {
-    data: [],
+    startTime: Date.now(),
     width: window.innerWidth,
     columns: [
       'Symbol',
@@ -40,10 +40,10 @@ class Table extends Component {
     const res = {};
     try {
       const {
-        original: { Bold: bold, Background: background }
+        original: { Bold: bold = 'normal', Background: background }
       } = rowInfo;
       res.style = {
-        fontWeight: bold || 'normal',
+        fontWeight: bold,
         backgroundColor: `rgba(0, 0, 0, ${background / 255})`
       };
     } catch (e) {
@@ -53,16 +53,12 @@ class Table extends Component {
   };
 
   componentDidMount() {
-    window.addEventListener('resize', this.updateDimensions);
-
-    axios
-      .get('/api/get-data')
-      .then(response => {
-        this.setState({ data: response.data.recordset });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    const {
+      updateDimensions
+      // startTimer,
+      // props: { getData }
+    } = this;
+    window.addEventListener('resize', updateDimensions);
   }
 
   componentWillUnmount() {
@@ -70,7 +66,13 @@ class Table extends Component {
   }
 
   render() {
-    const { data, columns, width } = this.state;
+    const {
+      props: { data, currentPage },
+      state: { columns, width },
+      changeRowStyle,
+      changeCellStyle,
+      changeHeaderStyle
+    } = this;
     const generatedColumns = generateTableColumns(columns, width);
 
     const style = {
@@ -82,13 +84,17 @@ class Table extends Component {
     return (
       <ReactTable
         style={style}
-        data={data}
+        data={concatData(data)}
         columns={generatedColumns}
-        getTrProps={this.changeRowStyle}
-        getTdProps={this.changeCellStyle}
-        getTheadThProps={this.changeHeaderStyle}
-        showPagination={false}
-        pageSize={data.length}
+        getTrProps={changeRowStyle}
+        getTdProps={changeCellStyle}
+        getTheadThProps={changeHeaderStyle}
+        showPagination={true}
+        showPageSizeOptions={false}
+        pageSize={data[currentPage].length}
+        nextText=">>"
+        previousText="<<"
+        defaultPage={currentPage - 1}
       />
     );
   }
