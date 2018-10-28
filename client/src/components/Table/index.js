@@ -32,9 +32,10 @@ class Table extends Component {
     };
   };
 
-  changeHeaderStyle = (state, rowInfo, column, instance) => ({
-    className: generateHeaderClasses(column)
-  });
+  changeHeaderStyle = (state, rowInfo, column, instance) =>
+    console.log({ rowInfo }) || {
+      className: generateHeaderClasses(column)
+    };
 
   changeRowStyle = (_, rowInfo = { original: {} }) => {
     const res = {};

@@ -8,12 +8,14 @@ app.use('/', express.static(path.join('app')));
 app.get('/api/get-data', (req, res) => {
   request('http://sherwin.retailscience.ca:5000/', (err, response, body) => {
     try {
+      // console.log({ body, response });
+      const data = JSON.parse(body || '[]').recordset;
       res.json({
         recordset: JSON.parse(body).recordset
       });
     } catch (e) {
-      console.error(e);
-      res.status(409).json({ msg: 'Cannot get data' });
+      console.error(e, { response });
+      res.status(409).json({ msg: 'Cannot get data', recordset: [] });
     }
   });
 });

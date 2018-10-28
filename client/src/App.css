@@ -43,11 +43,15 @@
   justify-content: space-around;
 }
 
+.rt-table {
+  max-height: 92vh;
+  overflow: scroll;
+}
 @media (max-width: 800px) {
   .fixed {
-    position: absolute !important;
+    position: sticky !important;
     background-color: #fff;
-    z-index: 10;
+    z-index: 0;
   }
 
   .pattern {
